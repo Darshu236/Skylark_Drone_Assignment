@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Drone Ops Coordinator</title>
+    <style>
+      :root {
+        --bg: #f4f2ee;
+        --ink: #1f1d1a;
+        --accent: #b23a48;
+        --card: #ffffff;
+        --muted: #6b625c;
+      }
+      body {
+        margin: 0;
+        font-family: "IBM Plex Serif", Georgia, serif;
+        background: radial-gradient(1200px 600px at 10% 0%, #fbeee8, var(--bg));
+        color: var(--ink);
+      }
+      header {
+        padding: 24px 28px 10px;
+      }
+      h1 {
+        font-size: 28px;
+        margin: 0 0 6px;
+        letter-spacing: 0.2px;
+      }
+      p {
+        margin: 0;
+        color: var(--muted);
+      }
+      main {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 12px 28px 28px;
+      }
+      .card {
+        background: var(--card);
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      }
+      #chat {
+        display: grid;
+        gap: 12px;
+        min-height: 220px;
+        max-height: 360px;
+        overflow: auto;
+      }
+      .bubble {
+        padding: 10px 12px;
+        border-radius: 12px;
+      }
+      .user {
+        background: #f1d6d9;
+        justify-self: end;
+      }
+      .bot {
+        background: #f7f3ef;
+        border: 1px solid #eee4dc;
+      }
+      form {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+      }
+      input {
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid #d9cec6;
+        font-size: 14px;
+      }
+      button {
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: none;
+        background: var(--accent);
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .examples {
+        display: grid;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Drone Operations Coordinator</h1>
+      <p>Conversational assistant for pilots, drones, and missions.</p>
+    </header>
+    <main>
+      <section class="card">
+        <div id="chat"></div>
+      </section>
+      <section class="card">
+        <form id="chatForm">
+          <input id="message" placeholder="Try: find available mapping pilots in Bangalore" />
+          <button type="submit">Send</button>
+        </form>
+        <div class="examples">
+          <div>Examples:</div>
+          <div>assign PRJ002</div>
+          <div>update pilot P001 status On Leave</div>
+          <div>find available drones with Thermal in Mumbai</div>
+          <div>detect conflicts</div>
+          <div>urgent reassignment</div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const chat = document.getElementById("chat");
+      const form = document.getElementById("chatForm");
+      const input = document.getElementById("message");
+
+      const addBubble = (text, cls) => {
+        const div = document.createElement("div");
+        div.className = `bubble ${cls}`;
+        div.textContent = text;
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
+      };
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const msg = input.value.trim();
+        if (!msg) return;
+        addBubble(msg, "user");
+        input.value = "";
+
+        const res = await fetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: msg }),
+        });
+        const data = await res.json();
+        addBubble(data.reply || "No response", "bot");
+      });
+    </script>
+  </body>
+</html>

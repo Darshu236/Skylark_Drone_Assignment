@@ -1,0 +1,8 @@
+pilot_id,name,skills,certifications,location,status,current_assignment,available_from
+P001,Arjun,"Mapping, Survey","DGCA, Night Ops",Bangalore,Assigned,PRJ001,2026-02-05
+P002,Neha,Inspection,DGCA,Mumbai,Available,Project-A,2026-02-12
+P003,Rohit,"Inspection, Mapping",DGCA,Mumbai,Available,–,2026-02-05
+P004,Sneha,"Survey, Thermal","DGCA, Night Ops",Bangalore,Assigned,PRJ003,2026-02-15
+P006,Aarav,Survey,DGCA,Bangalore,Available,–,2026-02-12
+P007,Darshan,Mapping,DGCA,Shivamogga,Assigned,–,2026-02-10
+P008,Chethan,Inspection,DGCA,Bangalore,Available,–,2026-02-10
